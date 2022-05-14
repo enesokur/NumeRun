@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnlimitedRoad : MonoBehaviour
 {
     GameObject Road;
+    int count = 1;
     void Start(){
         Road = this.transform.gameObject;
     }
@@ -15,6 +16,9 @@ public class UnlimitedRoad : MonoBehaviour
     }
 
    private void OnTriggerExit(Collider other) {
-       Invoke("MoveRoad",0.5f);
+        if(count % 2 == 1){
+            Invoke("MoveRoad",0.5f);
+        }
+        count++;
    }
 }
