@@ -8,6 +8,8 @@ public class UnlimitedRoad : MonoBehaviour
     int count = 1;
     void Start(){
         Road = this.transform.gameObject;
+        Obstacles script = GameObject.Find("Character").GetComponent<Obstacles>();
+        script.SpawnObjects(Road);
     }
 
 
@@ -17,8 +19,15 @@ public class UnlimitedRoad : MonoBehaviour
 
    private void OnTriggerExit(Collider other) {
         if(count % 2 == 1){
+            for(int i=0;i<Road.transform.childCount;i++){
+            Destroy(Road.transform.GetChild(i).gameObject);
+            }
             Invoke("MoveRoad",0.5f);
+            Obstacles script = GameObject.Find("Character").GetComponent<Obstacles>();
+            script.SpawnObjects(Road);
         }
         count++;
+
+
    }
 }

@@ -15,7 +15,7 @@ public class CharacterMove : MonoBehaviour
     GameObject Camera;
     Vector3 distance;
     bool squat = false;
-    public float speed =15f;
+    public float speed =10f;
     int position = 2;
     Animator animController;
     
@@ -32,8 +32,8 @@ public class CharacterMove : MonoBehaviour
     void Update(){
         CameraFollow();
         CalculateDashDirection();
-        if(speed < 45){
-            speed += 0.3f*Time.deltaTime;
+        if(speed < 25){
+            speed += 0.4f*Time.deltaTime;
         }
         if(rb.velocity.y == 0 && jumping == true){
             jumping = false;
