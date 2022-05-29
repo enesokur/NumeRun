@@ -12,36 +12,62 @@ public class CharacterMove : MonoBehaviour
     bool moving = false; // bool for to determine if the character is moving right or left
     float timer; // timer for how many seconds to move left or right
     Rigidbody rb;
-    GameObject Camera;
+    Transform camera;
     Vector3 distance;
     bool squat = false;
-    public float speed =10f;
+    public float speed = 10f;
     int position = 2;
     Animator animController;
-    
+    private Vector3 pausedSpeed;
+
+    bool inputFlag = false;
+
+
     bool jumping = false;
     void Start(){
         rb = GetComponent<Rigidbody>();
         rb.velocity = new Vector3(0f,0f,speed); // setting velocity at the beginning
-        Camera = GameObject.Find("Main Camera");
-        distance = Camera.transform.position - this.transform.position;
         animController = this.GetComponent<Animator>();
+        StopCharacter();
+        camera = Camera.main.transform;
+        distance = camera.position - this.transform.position;
     }
 
     
+    public void StartMovement()
+    {
+        rb.velocity = pausedSpeed;
+        animController.speed = 1;
+
+    }
+
     void Update(){
+        if (!GameManager.I.canPlay)
+        {
+            inputFlag = false;
+            return;
+        }
         CameraFollow();
         CalculateDashDirection();
-        if(speed < 25){
-            speed += 0.4f*Time.deltaTime;
+        CharacterMovement();
+    }
+
+    private void CharacterMovement()
+    {   
+        if (speed < 25)
+        {
+            speed += 0.4f * Time.deltaTime;
         }
-        if(rb.velocity.y == 0 && jumping == true){
+        if (rb.velocity.y == 0 && jumping == true)
+        {
             jumping = false;
-            animController.SetBool("isJumping",false);
+            animController.SetBool("isJumping", false);
         }
     }
 
     private void FixedUpdate() {
+        if (!GameManager.I.canPlay) return;
+
         if(moving == true){
             timer -= Time.fixedDeltaTime;// decreasing timer
         }
@@ -53,13 +79,17 @@ public class CharacterMove : MonoBehaviour
     }
 
     private void CalculateDashDirection(){
+        
         if(Input.touchCount > 0){
+
             Touch touch = Input.GetTouch(0);
-            if(touch.phase == TouchPhase.Began ){
-                startPos = touch.position; 
+            if(touch.phase == TouchPhase.Began  && !inputFlag){
+                startPos = touch.position;
+                inputFlag = true;
             }
             // dash left or right
-            else if(touch.phase == TouchPhase.Ended){
+            else if(touch.phase == TouchPhase.Ended && inputFlag){
+                inputFlag = false;
                 endPos = touch.position;
                 directionIn2D = endPos - startPos; // Calculating 2D vector on the screen
                 if(Mathf.Abs(directionIn2D.x) > 50f && Mathf.Abs(directionIn2D.y) < 200f && moving == false){
@@ -77,7 +107,7 @@ public class CharacterMove : MonoBehaviour
                         animController.SetBool("isJumping",true);
                     }
                 }
-                
+                // lean
                 else if(directionIn2D.y < -50f && Mathf.Abs(directionIn2D.x) < 200f){
                     squat = true;
                     animController.SetBool("isSliding",true);
@@ -99,7 +129,7 @@ public class CharacterMove : MonoBehaviour
     }
     // CameraFollow
     private void CameraFollow(){
-        Camera.transform.position = this.transform.position + distance;
+        camera.position = this.transform.position + distance;
     }
 
     private void RunningAgain(){
@@ -107,4 +137,24 @@ public class CharacterMove : MonoBehaviour
         squat = false;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            HitObstacle();
+        }
+    }
+
+    public void HitObstacle()
+    {
+        GameManager.I.Fail();
+        //Stop game
+    }
+
+    public void StopCharacter()
+    {
+        pausedSpeed = rb.velocity;
+        rb.velocity = Vector3.zero;
+        animController.speed = 0f;
+    }
 }
