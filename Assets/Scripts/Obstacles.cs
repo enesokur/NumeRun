@@ -9,6 +9,7 @@ public class Obstacles : MonoBehaviour
     bool firstPath = true;
     bool secondPath = true;
     bool thirdPath = true;
+    int counter = 0;
     //bool fourthPath = true;
     void Start(){
         
@@ -22,33 +23,47 @@ public class Obstacles : MonoBehaviour
             for(int j=1;j<=numOfObjectsRow;j++){
                 int objectPos = Random.Range(1,4);
                 if(objectPos == 1 && firstPath == true){
-                    int objectIndex = Random.Range(0,3);
+                    int objectIndex;
+                    objectIndex = Random.Range(0,3);
+                    if(counter == 2){
+                        objectIndex = Random.Range(1,3);
+                    }
+                    if(objectIndex == 0){
+                        counter++;
+                    }
                     var objectspawned = Instantiate(Objects[objectIndex]);
                     objectspawned.transform.position = new Vector3(-3.6f,objectspawned.transform.position.y,-20f+Road.transform.position.z+30f*i);
                     objectspawned.transform.parent = Road.transform;
                     firstPath = false;
                 }
                 else if(objectPos == 2 && secondPath == true){
-                    int objectIndex = Random.Range(0,3);
+                    int objectIndex;
+                    objectIndex = Random.Range(0,3);
+                    if(counter == 2){
+                        objectIndex = Random.Range(1,3);
+                    }
+                    if(objectIndex == 0){
+                        counter++;
+                    }
                     var objectspawned = Instantiate(Objects[objectIndex]);
                     objectspawned.transform.position = new Vector3(0f,objectspawned.transform.position.y,-20f+Road.transform.position.z+30f*i);
                     objectspawned.transform.parent = Road.transform;
                     secondPath = false;
                 }
                 else if(objectPos == 3 && thirdPath == true){
-                    int objectIndex = Random.Range(0,3);
+                    int objectIndex;
+                    objectIndex = Random.Range(0,3);
+                    if(counter == 2){
+                        objectIndex = Random.Range(1,3);
+                    }
+                    if(objectIndex == 0){
+                        counter++;
+                    }
                     var objectspawned = Instantiate(Objects[objectIndex]);
                     objectspawned.transform.position = new Vector3(3.6f,objectspawned.transform.position.y,-20f+Road.transform.position.z+30f*i);
                     objectspawned.transform.parent = Road.transform;
                     thirdPath = false;
                 }
-                /*else if(objectPos == 4 && fourthPath == true){
-                    int objectIndex = Random.Range(0,2);
-                    var objectspawned = Instantiate(Objects[objectIndex]);
-                    objectspawned.transform.position = new Vector3(3.6f,1f,Road.transform.position.z-40*i);
-                    objectspawned.transform.parent = Road.transform;
-                    fourthPath = false;
-                }*/
             }
             firstPath =true;
             secondPath =true;
