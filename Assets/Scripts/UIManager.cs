@@ -477,6 +477,9 @@ public class UIManager : MonoBehaviour
             }
         }
         CloseQuestion();
+        if(playerLife == 0){
+            GameManager.I.Fail();
+        }
     }
 
     private IEnumerator Timer(float waitTime){
