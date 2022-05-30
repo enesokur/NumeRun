@@ -15,10 +15,8 @@ public class UIManager : MonoBehaviour
     public GameObject comparisonPanel;
     public GameObject timerPanel;
     bool calculateQuestion;
-    int gameDifficulty = 1; // 0 = Normal, 1 = Hard 
-    public int gameMode = 0; // 0 = Mathematical Operations, Choosing Operator
-    //int gameDifficulty;
-    //int gamemode;
+    public int gameDifficulty = 0;
+    public int gameMode = 0; 
     public TextMeshProUGUI afirstButton;
     public TextMeshProUGUI asecondButton;
     public TextMeshProUGUI athirdButton;
@@ -465,7 +463,6 @@ public class UIManager : MonoBehaviour
             switch (playerLife)
             {
                 case 0:
-                    print("Canınız kalmamıştır, oyun sonlandı.");
                     heartOne.SetActive(false);
                     GameManager.I.Fail();
                     break;
@@ -483,12 +480,10 @@ public class UIManager : MonoBehaviour
     }
 
     private IEnumerator Timer(float waitTime){
-        Debug.Log(Time.timeScale);
         remainingTime = waitTime;
         while(remainingTime > 0){
             remainingTime -= Time.deltaTime;
             timeSlider.normalizedValue = Mathf.Clamp01(remainingTime / waitTime);
-            //Debug.Log(remainingTime);
             yield return new WaitForEndOfFrame();
         }
         if(detectAnswer)
@@ -502,6 +497,7 @@ public class UIManager : MonoBehaviour
     public GameObject retryMenu;
 
     public TextMeshProUGUI gameModeText;
+    public TextMeshProUGUI gameDifficultyText;
     public void EnableMainMenu(bool isEnable)
     {
         mainMenu.SetActive(isEnable);
@@ -524,9 +520,21 @@ public class UIManager : MonoBehaviour
             gameModeText.text = "Comparison Mode";
         }
     }
+    public void ToggleDifficulty()
+    {
+        gameDifficulty = (gameDifficulty + 1) % 2;
+        if (gameDifficulty == 0)
+        {
+            gameDifficultyText.text = "Normal Difficulty";
+        }
+        if (gameDifficulty == 1)
+        {
+            gameDifficultyText.text = "Hard Difficulty";
+        }
+    }
 
     #endregion
 }
-// Soruyu yanlış bildiğinde counterı bir eksilt ve kalplerden birini sil.
+
 
 

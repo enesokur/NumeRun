@@ -23,14 +23,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //if(!gameStarted)
-        //{
-        //    if (Input.touchCount > 0)
-        //    {
-        //        StartGame();
-        //    }
-        //}
-
         CalculateScore();
     }
 

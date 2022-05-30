@@ -13,6 +13,9 @@ public class CharacterMove : MonoBehaviour
     float timer; // timer for how many seconds to move left or right
     Rigidbody rb;
     Transform camera;
+    public GameObject heartOne;
+    public GameObject heartTwo;
+    public GameObject heartThree;
     Vector3 distance;
     bool squat = false;
     public float speed = 10f;
@@ -26,6 +29,9 @@ public class CharacterMove : MonoBehaviour
     bool jumping = false;
     void Start(){
         rb = GetComponent<Rigidbody>();
+        heartOne = GameObject.Find("heart1");
+        heartTwo = GameObject.Find("heart2");
+        heartThree = GameObject.Find("heart3");
         rb.velocity = new Vector3(0f,0f,speed); // setting velocity at the beginning
         animController = this.GetComponent<Animator>();
         StopCharacter();
@@ -148,7 +154,9 @@ public class CharacterMove : MonoBehaviour
     public void HitObstacle()
     {
         GameManager.I.Fail();
-        //Stop game
+        heartOne.SetActive(false);
+        heartTwo.SetActive(false);
+        heartThree.SetActive(false);
     }
 
     public void StopCharacter()
